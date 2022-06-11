@@ -11,7 +11,6 @@ public class ChatEmbeds implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ChatEmbedsConfig.registerConfig();
         System.out.println("Chat Embeds active!");
     }
 }

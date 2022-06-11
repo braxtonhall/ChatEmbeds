@@ -19,9 +19,6 @@
   "entrypoints": {
     "main": [
       "com.yunus1903.chatembeds.ChatEmbeds"
-    ],
-    "modmenu": [
-      "com.yunus1903.chatembeds.client.screen.ChatEmbedsModMenuScreen"
     ]
   },
   "mixins": [
@@ -29,9 +26,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.13.3",
-    "fabric": "*",
-    "minecraft": "1.18.2",
+    "fabricloader": ">=0.14.7",
+    "minecraft": "1.19",
     "java": ">=17"
   }
 }

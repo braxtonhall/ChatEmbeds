@@ -5,8 +5,9 @@ import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Language;
 
@@ -18,7 +19,7 @@ public abstract class AbstractImageEmbedScreen<T extends Embed> extends EmbedScr
 {
     private final int imageWidth, imageHeight;
     protected int scaledImageWidth, scaledImageHeight;
-    private LiteralText openImage;
+    private MutableText openImage;
 
     public AbstractImageEmbedScreen(ChatScreen parent, int scrollPos, T embed, NativeImage image)
     {
@@ -45,7 +46,7 @@ public abstract class AbstractImageEmbedScreen<T extends Embed> extends EmbedScr
             }
         }
 
-        openImage = new LiteralText("Open image");
+        openImage = MutableText.of(Text.of("Open image").getContent());
     }
 
     @Override

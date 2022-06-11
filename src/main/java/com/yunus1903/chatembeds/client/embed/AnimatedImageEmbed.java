@@ -4,7 +4,7 @@ import at.dhyan.open_imaging.GifDecoder;
 import com.google.common.io.ByteStreams;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yunus1903.chatembeds.ChatEmbeds;
-import com.yunus1903.chatembeds.ChatEmbedsConfig;
+import com.yunus1903.chatembeds.Constants;
 import com.yunus1903.chatembeds.client.EmbedChatLine;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -13,8 +13,8 @@ import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 
@@ -53,9 +53,6 @@ public class AnimatedImageEmbed extends Embed
         frames = new ArrayList<>();
         List<ChatHudLine<OrderedText>> lines = new ArrayList<>();
         if (!loadImage()) return lines;
-
-        if (!ChatEmbedsConfig.getConfig().removeUrlMessage)
-            lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(new LiteralText("")), chatHudLineId));
 
         NativeImage scaledImage = frames.get(0).getScaledImage();
 
@@ -191,10 +188,9 @@ public class AnimatedImageEmbed extends Embed
         {
             this.image = image;
             ChatHud gui = MinecraftClient.getInstance().inGameHud.getChatHud();
-            ChatEmbedsConfig config = ChatEmbedsConfig.getConfig();
             this.scaledImage = ImageEmbed.scaleImage(image,
-                    Math.min(config.chatImageEmbedMaxWidth, gui.getWidth()),
-                    config.chatImageEmbedMaxHeight);
+                    Math.min(Constants.chatImageEmbedMaxWidth, gui.getWidth()),
+                    Constants.chatImageEmbedMaxHeight);
             this.resourceLocation = resourceLocation;
             this.delay = delay;
         }

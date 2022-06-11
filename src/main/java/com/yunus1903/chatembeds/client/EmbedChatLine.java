@@ -4,8 +4,8 @@ import com.yunus1903.chatembeds.client.embed.Embed;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 
 /**
@@ -25,7 +25,7 @@ public abstract class EmbedChatLine<T extends Embed> extends ChatHudLine<Ordered
      */
     public EmbedChatLine(int ticks, int ChatHudLineId, T embed)
     {
-        this(ticks, new LiteralText(""), ChatHudLineId, embed);
+        this(ticks, Text.of(""), ChatHudLineId, embed);
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class EmbedChatLine<T extends Embed> extends ChatHudLine<Ordered
      * @param ChatHudLineId ID of the chat line
      * @param embed Instance of the {@link Embed}
      */
-    public EmbedChatLine(int ticks, LiteralText text, int ChatHudLineId, T embed)
+    public EmbedChatLine(int ticks, Text text, int ChatHudLineId, T embed)
     {
         super(ticks, Language.getInstance().reorder(text), ChatHudLineId);
         this.embed = embed;

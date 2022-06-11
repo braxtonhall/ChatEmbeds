@@ -2,19 +2,17 @@ package com.yunus1903.chatembeds.client.embed;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yunus1903.chatembeds.ChatEmbeds;
-import com.yunus1903.chatembeds.ChatEmbedsConfig;
+import com.yunus1903.chatembeds.Constants;
 import com.yunus1903.chatembeds.client.EmbedChatLine;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 
@@ -44,9 +42,6 @@ public class ImageEmbed extends Embed
     {
         List<ChatHudLine<OrderedText>> lines = new ArrayList<>();
         if (!loadImage()) return lines;
-
-        if (!ChatEmbedsConfig.getConfig().removeUrlMessage)
-            lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(new LiteralText("")), chatHudLineId));
 
         double imageHeight = scaledImage.getHeight();
         double lineHeight = 9.0D;
@@ -98,10 +93,9 @@ public class ImageEmbed extends Embed
         if (image == null) return false;
 
         ChatHud gui = MinecraftClient.getInstance().inGameHud.getChatHud();
-        ChatEmbedsConfig config = ChatEmbedsConfig.getConfig();
         scaledImage = scaleImage(image,
-                Math.min(config.chatImageEmbedMaxWidth, gui.getWidth()),
-                config.chatImageEmbedMaxHeight);
+                Math.min(Constants.chatImageEmbedMaxWidth, gui.getWidth()),
+                Constants.chatImageEmbedMaxHeight);
         imageResourceLocation = MinecraftClient.getInstance().getTextureManager()
                 .registerDynamicTexture("chat_embed_image", new NativeImageBackedTexture(image));
 

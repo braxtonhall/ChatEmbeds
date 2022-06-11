@@ -1,7 +1,7 @@
 package com.yunus1903.chatembeds.client.embed;
 
 import com.yunus1903.chatembeds.ChatEmbeds;
-import com.yunus1903.chatembeds.ChatEmbedsConfig;
+import com.yunus1903.chatembeds.Constants;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.text.OrderedText;
 import org.jetbrains.annotations.Nullable;
@@ -117,7 +117,6 @@ public abstract class Embed
             String extension = parsedURL.toString().substring(parsedURL.toString().lastIndexOf(".") + 1);
             if (extension.contains("?")) extension = extension.substring(0, extension.indexOf("?"));
 
-            ChatEmbedsConfig config = ChatEmbedsConfig.getConfig();
             try
             {
                 String imageURL = ImageExtractor.extractImageURL(parsedURL);
@@ -126,11 +125,9 @@ public abstract class Embed
                     parsedURL = new URL(imageURL);
                     if (extension.equals("gif") || extension.equals("gifv"))
                     {
-                        if (config.enableAnimatedImageEmbeds)
-                            return new AnimatedImageEmbed(parsedURL, ticks, chatHudLineId);
+                        return new AnimatedImageEmbed(parsedURL, ticks, chatHudLineId);
                     }
-                    else if (config.enableImageEmbeds)
-                        return new ImageEmbed(parsedURL, ticks, chatHudLineId);
+                    else return new ImageEmbed(parsedURL, ticks, chatHudLineId);
                 }
             }
             catch (MalformedURLException e)
@@ -139,7 +136,8 @@ public abstract class Embed
             }
             catch (IOException ignored) { }
 
-            if (config.enableTextEmbeds) return new TextEmbed(parsedURL, ticks, chatHudLineId);
+            // TODO fix TextEmbeds
+            // return new TextEmbed(parsedURL, ticks, chatHudLineId);
             return null;
         }
 

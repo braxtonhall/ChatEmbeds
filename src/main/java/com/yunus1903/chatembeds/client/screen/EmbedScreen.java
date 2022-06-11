@@ -4,7 +4,7 @@ import com.yunus1903.chatembeds.client.embed.Embed;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 /**
  * Abstract class for {@link Embed} screen's
@@ -25,7 +25,7 @@ public abstract class EmbedScreen<T extends Embed> extends Screen
      */
     public EmbedScreen(ChatScreen parent, int scrollPos, T embed)
     {
-        super(new LiteralText("Embed image"));
+        super(Text.of("Embed image"));
         this.parent = parent;
         this.scrollPos = scrollPos;
         this.embed = embed;

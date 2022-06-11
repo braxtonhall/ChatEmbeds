@@ -28,7 +28,8 @@ import java.util.List;
 public class TextEmbed extends Embed
 {
     @Nullable
-    private Text title, description;
+    private MutableText title;
+    private Text description;
 
     TextEmbed(URL url, int ticks, int ChatHudLineId)
     {
@@ -41,16 +42,16 @@ public class TextEmbed extends Embed
         List<ChatHudLine<OrderedText>> lines = new ArrayList<>();
         if (!loadText() || title == null) return lines;
 
-        lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(new LiteralText("")), chatHudLineId));
+        lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(Text.of("")), chatHudLineId));
         lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(title), chatHudLineId));
-        lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(new LiteralText("")), chatHudLineId));
+        lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(Text.of("")), chatHudLineId));
         if (description != null)
         {
-            int i = MathHelper.floor((double) ChatHud.getWidth(MinecraftClient.getInstance().options.chatWidth) / MinecraftClient.getInstance().options.chatScale);
+            int i = MathHelper.floor((double) ChatHud.getWidth(MinecraftClient.getInstance().options.getChatWidth().getValue()) / MinecraftClient.getInstance().options.getChatScale().getValue());
             description = ((MutableText) description).formatted(Formatting.GRAY);
             List<OrderedText> list = MinecraftClient.getInstance().textRenderer.wrapLines(description, i);
             list.forEach(line -> lines.add(new ChatHudLine<>(ticks, line, chatHudLineId)));
-            lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(new LiteralText("")), chatHudLineId));
+            lines.add(new ChatHudLine<>(ticks, Language.getInstance().reorder(Text.of("")), chatHudLineId));
         }
 
         return lines;
@@ -73,7 +74,7 @@ public class TextEmbed extends Embed
 
         try
         {
-            title = new LiteralText(doc.getProperty("title").toString()).formatted(Formatting.GRAY, Formatting.UNDERLINE);
+            title = MutableText.of(Text.of(doc.getProperty("title").toString()).getContent()).formatted(Formatting.GRAY, Formatting.UNDERLINE);
         }
         catch (NullPointerException ignored) { }
 
@@ -81,7 +82,7 @@ public class TextEmbed extends Embed
         {
             try
             {
-                title = new LiteralText((String) doc.getElement(doc.getDefaultRootElement(), HTML.Attribute.NAME, "title").getAttributes().getAttribute(HTML.Attribute.CONTENT)).formatted(Formatting.GRAY, Formatting.UNDERLINE);
+                title = MutableText.of(Text.of((String) doc.getElement(doc.getDefaultRootElement(), HTML.Attribute.NAME, "title").getAttributes().getAttribute(HTML.Attribute.CONTENT)).getContent()).formatted(Formatting.GRAY, Formatting.UNDERLINE);
             }
             catch (NullPointerException ignored) { }
         }
@@ -89,7 +90,7 @@ public class TextEmbed extends Embed
         try
         {
             String desc = (String) doc.getElement(doc.getDefaultRootElement(), HTML.Attribute.NAME, "description").getAttributes().getAttribute(HTML.Attribute.CONTENT);
-            description = new LiteralText(desc.replace("\r", "\n"));
+            description = Text.of(desc.replace("\r", "\n"));
         }
         catch (NullPointerException ignored) { }
 

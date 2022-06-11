@@ -2,7 +2,6 @@ package com.yunus1903.chatembeds.client.mixin;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yunus1903.chatembeds.ChatEmbedsConfig;
 import com.yunus1903.chatembeds.client.ChatGuiUtil;
 import com.yunus1903.chatembeds.client.EmbedChatLine;
 import com.yunus1903.chatembeds.client.embed.Embed;
@@ -11,10 +10,8 @@ import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.util.ChatMessages;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Language;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Final;
@@ -116,10 +113,11 @@ public abstract class NewChatGuiMixin
                 matrixStack.push();
                 matrixStack.translate(4.0D, 8.0D, 0.0D);
                 matrixStack.scale(f, f, 1.0F);
-                double d0 = this.client.options.chatOpacity * (double)0.9F + (double)0.1F;
-                double d1 = this.client.options.textBackgroundOpacity;
-                double d2 = 9.0D * (this.client.options.chatLineSpacing + 1.0D);
-                double d3 = -8.0D * (this.client.options.chatLineSpacing + 1.0D) + 4.0D * this.client.options.chatLineSpacing;
+                double d0 = this.client.options.getChtOpacity().getValue() * (double)0.9F + (double)0.1F;
+                double d1 = this.client.options.getTextBackgroundOpacity().getValue();
+                double g = (Double)this.client.options.getChatLineSpacing().getValue();
+                double d2 = 9.0D * (g + 1.0D);
+                double d3 = -8.0D * (g + 1.0D) + 4.0D * g;
                 int l = 0;
 
                 for(int i1 = 0; i1 + this.scrolledLines < this.visibleMessages.size() && i1 < i; ++i1) {
@@ -160,7 +158,7 @@ public abstract class NewChatGuiMixin
                     fill(matrixStack, -2, 0, k + 4, 9, i3 << 24);
                     RenderSystem.enableBlend();
                     matrixStack.translate(0.0D, 0.0D, 50.0D);
-                    this.client.textRenderer.drawWithShadow(matrixStack, new TranslatableText("chat.queue", this.messageQueue.size()), 0.0F, 1.0F, 16777215 + (k2 << 24));
+                    this.client.textRenderer.drawWithShadow(matrixStack, Text.translatable("chat.queue", this.messageQueue.size()), 0.0F, 1.0F, 16777215 + (k2 << 24));
                     matrixStack.pop();
                     RenderSystem.disableBlend();
                 }
@@ -220,13 +218,12 @@ public abstract class NewChatGuiMixin
                 Embed embed = new Embed.Builder(matcher.group(), ticks, chatLineId).build();
                 if (embed != null)
                 {
-                    if (ChatEmbedsConfig.getConfig().removeUrlMessage)
-                        visibleMessages.removeAll(visibleMessages.stream()
-                                .filter(iReorderingProcessorChatLine ->
-                                        list.contains(iReorderingProcessorChatLine.getText()))
-                                .collect(Collectors.toList()));
+                    visibleMessages.removeAll(visibleMessages.stream()
+                        .filter(iReorderingProcessorChatLine ->
+                                list.contains(iReorderingProcessorChatLine.getText()))
+                        .collect(Collectors.toList()));
                     visibleMessages.add(index, new ChatHudLine<>(ticks, Language.getInstance()
-                            .reorder(new LiteralText(chatText.getString().split(" ")[0])), chatLineId));
+                            .reorder(Text.of(chatText.getString().split(" ")[0])), chatLineId));
                     visibleMessages.addAll(index, Lists.reverse(embed.getChatHudLines()));
                 }
 
@@ -295,7 +292,7 @@ public abstract class NewChatGuiMixin
             double d0 = mouseX - 2.0D;
             double d1 = (double) this.client.getWindow().getScaledHeight() - mouseY - 40.0D;
             d0 = MathHelper.floor(d0 / this.getChatScale());
-            d1 = MathHelper.floor(d1 / (this.getChatScale() * (this.client.options.chatLineSpacing + 1.0D)));
+            d1 = MathHelper.floor(d1 / (this.getChatScale() * (this.client.options.getChatLineSpacing().getValue() + 1.0D)));
             if (!(d0 < 0.0D) && !(d1 < 0.0D))
             {
                 int i = Math.min(this.getVisibleLineCount(), this.visibleMessages.size());
